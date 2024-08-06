@@ -5,7 +5,7 @@ import { ProductController } from './products/infrastructure/controllers/product
 import { PublishProductUseCase } from './products/application/usecases/publish-product.usecase';
 import { EnvConfigServiceFactory } from './shared/infrastructure/env-config/env-config.service';
 import { PublishOrderUseCase } from './orders/application/usecases/publish-order.usecase';
-import { OrderController } from './orders/infrastructure/controllers/product.controller';
+import { OrderController } from './orders/infrastructure/controllers/order.controller';
 
 const envConfigService = EnvConfigServiceFactory.create();
 

@@ -13,8 +13,6 @@ export class OrderController {
 
 		router.post('/', async (req, res) => {
 			try {
-				const { name, price, description } = req.body;
-
 				const createDto = new CreateDto(req.body);
 
 				createDto.validate();
