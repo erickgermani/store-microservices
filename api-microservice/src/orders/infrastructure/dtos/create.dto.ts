@@ -6,25 +6,27 @@ import { PositiveValidator } from '../../../shared/infrastructure/validator/posi
 import { RequiredValidator } from '../../../shared/infrastructure/validator/required.validator';
 import { StringValidator } from '../../../shared/infrastructure/validator/string.validator';
 import { ValidatorChain } from '../../../shared/infrastructure/validator/validator';
-import { PublishProductUseCase } from '../../application/usecases/publish-product.usecase';
+import { PublishOrderUseCase } from '../../application/usecases/publish-order.usecase';
 
-export class CreateDto implements PublishProductUseCase.Input, Dto<PublishProductUseCase.Input> {
-	name: string;
-	price: number;
-	description?: string;
+export class CreateDto implements PublishOrderUseCase.Input, Dto<PublishOrderUseCase.Input> {
+	quantityOfProducts: number;
+	totalPrice: number;
 
-	constructor(dto: PublishProductUseCase.Input) {
-		this.name = dto.name;
-		this.price = dto.price;
-		this.description = dto.description;
+	constructor(dto: PublishOrderUseCase.Input) {
+		this.quantityOfProducts = dto.quantityOfProducts;
+		this.totalPrice = dto.totalPrice;
 	}
 
 	validate(): void {
 		const errors = [];
 
-		errors.push(...this.validateStringRequired(this.name, 'name'));
-
-		errors.push(...this.validatePositiveIntegerNumberRequired(this.price, 'price'));
+		errors.push(
+			...this.validatePositiveIntegerNumberRequired(
+				this.quantityOfProducts,
+				'quantityOfProducts'
+			)
+		);
+		errors.push(...this.validatePositiveIntegerNumberRequired(this.totalPrice, 'totalPrice'));
 
 		if (errors.length)
 			throw new EntityValidationError(
