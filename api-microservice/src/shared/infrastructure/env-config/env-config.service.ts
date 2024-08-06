@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { EnvParamNotDefinedError } from '../errors/env-param-not-defined-error';
 
 export interface EnvConfig {
+	getPort(): number;
 	getNodeEnv(): string;
 	getOrdersQueue(): string;
 	getProductsQueue(): string;
@@ -18,6 +19,10 @@ export class EnvConfigService implements EnvConfig {
 		if (!EnvConfigService.instance) EnvConfigService.instance = new EnvConfigService();
 
 		return EnvConfigService.instance;
+	}
+
+	getPort(): number {
+		return parseInt(process.env.PORT || '3000');
 	}
 
 	getNodeEnv(): string {

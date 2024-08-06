@@ -1,11 +1,9 @@
 import express from 'express';
 import { MessagingService } from './shared/infrastructure/messaging/messaging-service';
 import { RabbitMQService } from './shared/infrastructure/messaging/rabbitmq/service';
-import { ProductController } from './products/infrastructure/controllers/product.controller';
-import { PublishProductUseCase } from './products/application/usecases/publish-product.usecase';
+import { OrderModule } from './orders/infrastructure/order.module';
+import { ProductModule } from './products/infrastructure/product.module';
 import { EnvConfigServiceFactory } from './shared/infrastructure/env-config/env-config.service';
-import { PublishOrderUseCase } from './orders/application/usecases/publish-order.usecase';
-import { OrderController } from './orders/infrastructure/controllers/order.controller';
 
 const envConfigService = EnvConfigServiceFactory.create();
 
@@ -15,27 +13,17 @@ app.use(express.json());
 
 const messagingService: MessagingService = new RabbitMQService();
 
-const publishProductUseCase = new PublishProductUseCase.UseCase(
-	messagingService,
-	envConfigService.getProductsQueue()
-);
+const productModule = new ProductModule(messagingService);
 
-const productController = new ProductController(publishProductUseCase);
+app.use('/api/products', productModule.controller.getRouter());
 
-app.use('/api/products', productController.getRouter());
+const orderModule = new OrderModule(messagingService);
 
-const publishOrderUseCase = new PublishOrderUseCase.UseCase(
-	messagingService,
-	envConfigService.getOrdersQueue()
-);
+app.use('/api/orders', orderModule.controller.getRouter());
 
-const orderController = new OrderController(publishOrderUseCase);
+const PORT = envConfigService.getPort();
 
-app.use('/api/orders', orderController.getRouter());
-
-const PORT = process.env.PORT;
-
-app.listen(PORT ?? 3000, async () => {
+app.listen(PORT, async () => {
 	await messagingService.connect();
 
 	console.log(`Server is running on port ${PORT}`);

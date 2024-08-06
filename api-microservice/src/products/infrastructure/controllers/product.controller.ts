@@ -2,8 +2,9 @@ import { Router } from 'express';
 import { PublishProductUseCase } from '../../application/usecases/publish-product.usecase';
 import { CreateDto } from '../dtos/create.dto';
 import { EntityValidationError } from '../../../shared/domain/errors/entity-validation-error';
+import { Controller } from '../../../shared/infrastructure/controller';
 
-export class ProductController {
+export class ProductController implements Controller {
 	constructor(private readonly publicProductUseCase: PublishProductUseCase.UseCase) {
 		this.publicProductUseCase = publicProductUseCase;
 	}
