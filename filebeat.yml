@@ -1,0 +1,17 @@
+filebeat.inputs:
+    - type: container
+      paths:
+          - '/var/lib/docker/containers/*/*.log'
+      processors:
+          - add_docker_metadata: ~
+      containers:
+          path: '/var/lib/docker/containers'
+          stream: 'all'
+          ids:
+              - '*'
+
+output.elasticsearch:
+    hosts: ['http://elasticsearch:9200']
+
+setup.kibana:
+    host: 'http://kibana:5601'

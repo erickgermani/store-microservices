@@ -5,6 +5,10 @@ import { OrderModule } from './orders/infrastructure/order.module';
 import { ProductModule } from './products/infrastructure/product.module';
 import { EnvConfigServiceFactory } from './shared/infrastructure/env-config/env-config.service';
 
+// import { logger } from './shared/infrastructure/logging/winston/service';
+
+// console.log('logger :>> ', logger);
+
 const envConfigService = EnvConfigServiceFactory.create();
 
 const app = express();
