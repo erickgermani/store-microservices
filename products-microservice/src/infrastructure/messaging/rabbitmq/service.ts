@@ -7,7 +7,7 @@ export class RabbitMQService implements MessagingService {
 
 	async connect(): Promise<void> {
 		try {
-			this.connection = await amqp.connect('amqp://localhost');
+			this.connection = await amqp.connect('amqp://rabbitmq');
 			this.channel = await this.connection.createChannel();
 			console.log('Connected to RabbitMQ');
 		} catch (error) {

@@ -1,0 +1,51 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  mongodb:
+    image: bitnami/mongodb:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ROOT_PASSWORD=rootpassword
+      - MONGODB_USERNAME=user
+      - MONGODB_PASSWORD=password
+    volumes:
+      - mongodb_data:/bitnami/mongodb
+
+  api:
+    build:
+      context: ./api-microservice
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rabbitmq
+      - mongodb
+
+  products:
+    build:
+      context: ./products-microservice
+    depends_on:
+      - rabbitmq
+      - mongodb
+
+  orders:
+    build:
+      context: ./orders-microservice
+    depends_on:
+      - rabbitmq
+      - mongodb
+
+volumes:
+  rabbitmq_data:
+  mongodb_data:
